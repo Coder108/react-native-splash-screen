@@ -3,6 +3,11 @@ package org.devio.rn.splashscreen;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Build;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 
 import java.lang.ref.WeakReference;
 
@@ -76,15 +81,41 @@ public class SplashScreen {
             public void run() {
                 if (mSplashDialog != null && mSplashDialog.isShowing()) {
                     boolean isDestroyed = false;
+                    AnimationSet animationSet = new AnimationSet(true);
+                    AlphaAnimation fadeOut = new AlphaAnimation(1, 0.3f);
+                    fadeOut.setDuration(1000);
+                    animationSet.addAnimation(fadeOut);
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    final View view = ((ViewGroup)mSplashDialog.getWindow().getDecorView()).getChildAt(0);
+                    view.startAnimation(animationSet);
+
+                    animationSet.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                        }
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            view.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mSplashDialog.dismiss();
+                                    mSplashDialog = null;
+                                }
+                            });
+                        }
+                    });
+
+                    /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         isDestroyed = _activity.isDestroyed();
-                    }
+                    }*/
 
-                    if (!_activity.isFinishing() && !isDestroyed) {
+                   /* if (!_activity.isFinishing() && !isDestroyed) {
                         mSplashDialog.dismiss();
                     }
-                    mSplashDialog = null;
+                    mSplashDialog = null;*/
                 }
             }
         });
