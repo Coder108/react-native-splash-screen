@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 
 import java.lang.ref.WeakReference;
 
@@ -85,6 +86,9 @@ public class SplashScreen {
                     AlphaAnimation fadeOut = new AlphaAnimation(1, 0.3f);
                     fadeOut.setDuration(1000);
                     animationSet.addAnimation(fadeOut);
+                    ScaleAnimation scale = new ScaleAnimation(1, 1.5f, 1, 1.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.65f);
+                    scale.setDuration(2000);
+                    animationSet.addAnimation(scale);
 
                     final View view = ((ViewGroup)mSplashDialog.getWindow().getDecorView()).getChildAt(0);
                     view.startAnimation(animationSet);
